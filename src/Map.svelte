@@ -43,6 +43,17 @@
     map && map.resize()
   }
 
+  let lastBounds;
+  function handleRebound(m = map) {
+    const bounds = m.getBounds();
+    const token = bounds.toString();
+
+    if (token === lastBounds) return;
+
+    lastBounds = token;
+    dispatch('rebound', { map: m, bounds, token })
+  }
+
   onMount(async () => {
     const mapboxModule = await import('mapbox-gl')
     mapbox = mapboxModule.default
@@ -62,6 +73,12 @@
       el = new mapbox.Map(optionsWithDefaults)
 
       el.on('dragend', () => dispatch('recentre', { center: el.getCenter() }))
+
+      // So we can preload data while the map is loading
+      handleRebound(el);
+
+      el.on('zoomend', handleRebound.bind(null, el));
+      el.on('moveend', handleRebound.bind(null, el));
 
       el.on('load', () => {
         map = el

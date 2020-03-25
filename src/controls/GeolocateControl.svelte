@@ -1,5 +1,5 @@
 <script>
-	import { getContext } from 'svelte'
+	import { getContext, createEventDispatcher } from 'svelte'
 	import { contextKey } from '../mapbox.js'
 
 	const { getMap, getMapbox } = getContext(contextKey)
@@ -8,7 +8,10 @@
 
   export let position = 'top-left'
   export let options = {}
-  
-  const geolocate = new mapbox.GeolocateControl(options)
-  map.addControl(geolocate, position)
+
+  const dispatch = createEventDispatcher();
+
+  const geolocate = new mapbox.GeolocateControl(options);
+  map.addControl(geolocate, position);
+  geolocate.on('geolocate', event => dispatch('geolocate', event));
 </script>
