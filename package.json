@@ -1,8 +1,8 @@
 {
   "name": "@beyonk/svelte-mapbox",
   "svelte": "src/components.js",
-  "module": "index.mjs",
-  "main": "index.mjs",
+  "module": "dist/components.mjs",
+  "main": "dist/components.js",
   "version": "3.0.0",
   "scripts": {
     "build": "rollup -c",
